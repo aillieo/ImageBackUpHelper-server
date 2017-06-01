@@ -67,6 +67,6 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    server = httpserver.HTTPServer(('localhost', 8080), MyHandler)
+    server = httpserver.HTTPServer(('', 8080), MyHandler)
     print('Starting server, use <Ctrl-C> to stop')
     server.serve_forever()
