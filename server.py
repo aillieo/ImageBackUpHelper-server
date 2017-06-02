@@ -37,8 +37,10 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
         message_parts.append('')
         message = '\r\n'.join(message_parts)
         self.send_response(200)
+        self.send_header('Content-type', 'text/json')
         self.end_headers()
-        self.wfile.write(message.encode("utf-8"))
+        #self.wfile.write(message.encode("utf-8"))
+        self.wfile.write('{"name":"name","content":"content"}'.encode("utf-8"))
         return
 
     def do_POST(self):
