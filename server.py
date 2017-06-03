@@ -63,19 +63,15 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
         message = '\r\n'.join(message_parts)
         #print('message: %s' % message)
         self.wfile.write('{"name":"name","content":"content"}'.encode("utf-8"))
-        filename = ''
-        filevalue = ''
         for field in form.keys():
             field_item = form[field]
-            if(field == 'name'):
-                filename = field_item
-            if(field == 'file'):
-                filevalue = field_item
-            #filesize = len(filevalue)
+            filename = field_item.filename
+            filevalue = field_item.value
+            filesize = len(filevalue)
             #print(filesize)
-            print('||%s --- %d||' % (filename, len(str(filevalue))))
-            #with open('filename', 'wb') as f:
-                #f.write(filevalue)
+            if(filename):
+                with open(filename, 'wb') as f:
+                    f.write(filevalue)
         return
 
 
