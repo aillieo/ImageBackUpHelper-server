@@ -52,19 +52,30 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
                      }
         )
         self.send_response(200)
+        self.send_header('Content-type', 'text/json')
         self.end_headers()
-        self.wfile.write(('Client: %sn ' % str(self.client_address)).encode("utf-8"))
-        self.wfile.write(('User-agent: %sn' % str(self.headers['user-agent'])).encode("utf-8"))
-        self.wfile.write(('Path: %sn' % self.path).encode("utf-8"))
-        self.wfile.write('Form data:n'.encode("utf-8"))
+        message_parts = [
+                'Client: %s ' % str(self.client_address),
+                'User-agent: %s' % str(self.headers['user-agent']),
+                'Path: %s' % self.path,
+                'Form data:'
+                ]
+        message = '\r\n'.join(message_parts)
+        #print('message: %s' % message)
+        self.wfile.write('{"name":"name","content":"content"}'.encode("utf-8"))
+        filename = ''
+        filevalue = ''
         for field in form.keys():
             field_item = form[field]
-            filename = field_item.filename
-            filevalue = field_item.value
-            filesize = len(filevalue)
-            print(filesize)
-            with open(filename +'a', 'wb') as f:
-                f.write(filevalue)
+            if(field == 'name'):
+                filename = field_item
+            if(field == 'file'):
+                filevalue = field_item
+            #filesize = len(filevalue)
+            #print(filesize)
+            print('||%s --- %d||' % (filename, len(str(filevalue))))
+            #with open('filename', 'wb') as f:
+                #f.write(filevalue)
         return
 
 
