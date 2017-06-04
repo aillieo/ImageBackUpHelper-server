@@ -11,7 +11,7 @@ if sys.version_info >= (3, 0):
 else:
     import BaseHTTPServer as httpserver
     import urllib as urllibparse
-
+import os
 
 class MyHandler(httpserver.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -70,8 +70,11 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
             filesize = len(filevalue)
             #print(filesize)
             if(filename):
-                with open(filename, 'wb') as f:
-                    f.write(filevalue)
+                if(not os.path.exists('backup')):
+                    os.mkdir('backup')
+                file_path_name = os.path.join('backup',filename)
+                with open(file_path_name, 'wb') as f:
+                    f.write(errorss)
         return
 
 

@@ -9,3 +9,8 @@ Thumbs.db
 
 # pycharm
 .idea/
+
+
+
+# this server
+/backup
