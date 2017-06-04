@@ -74,7 +74,7 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
                     os.mkdir('backup')
                 file_path_name = os.path.join('backup',filename)
                 with open(file_path_name, 'wb') as f:
-                    f.write(errorss)
+                    f.write(filevalue)
         return
 
 
