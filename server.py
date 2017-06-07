@@ -4,6 +4,7 @@
 from __future__ import print_function
 import sys
 import cgi
+import os
 if sys.version_info >= (3, 0):
     from http import server as httpserver
     from urllib import parse as urllibparse
@@ -11,7 +12,7 @@ if sys.version_info >= (3, 0):
 else:
     import BaseHTTPServer as httpserver
     import urllib as urllibparse
-import os
+
 
 class MyHandler(httpserver.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -57,11 +58,14 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
         message_parts = [
                 'Client: %s ' % str(self.client_address),
                 'User-agent: %s' % str(self.headers['user-agent']),
-                'Path: %s' % self.path,
-                'Form data:'
+                'Path: %s' % self.path
                 ]
         message = '\r\n'.join(message_parts)
-        #print('message: %s' % message)
+        message += '\r\nForm data:\r\n'
+        for field in form.keys():
+            field_item = form[field]
+            message += ('\t%s=%s\n' % (field, str(field_item.value)[0:100]))
+        print('message: \r\n%s' % message)
         self.wfile.write('{"name":"name","content":"content"}'.encode("utf-8"))
         for field in form.keys():
             field_item = form[field]
@@ -69,8 +73,8 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
             filevalue = field_item.value
             filesize = len(filevalue)
             #print(filesize)
-            if(filename):
-                if(not os.path.exists('backup')):
+            if filename:
+                if not os.path.exists('backup'):
                     os.mkdir('backup')
                 file_path_name = os.path.join('backup',filename)
                 with open(file_path_name, 'wb') as f:
