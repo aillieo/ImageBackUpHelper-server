@@ -14,7 +14,21 @@ else:
     import urllib as urllibparse
 
 
+def save_file(filename, filevalue):
+    if not os.path.exists('backup'):
+        os.mkdir('backup')
+    file_path_name = os.path.join('backup', filename)
+    fpath, fext = os.path.splitext(file_path_name)
+    i = 1
+    while os.path.exists(file_path_name):
+        file_path_name = "%s-%d%s" % (fpath, i, fext)
+        i += 1
+    with open(file_path_name, 'wb') as f:
+        f.write(filevalue)
+
+
 class MyHandler(httpserver.BaseHTTPRequestHandler):
+
     def do_GET(self):
         parsed_path = urllibparse.urlparse(self.path)
         message_parts = [
@@ -40,7 +54,7 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/json')
         self.end_headers()
-        #self.wfile.write(message.encode("utf-8"))
+        print('message: \r\n%s' % message)
         self.wfile.write('{"name":"name","content":"content"}'.encode("utf-8"))
         return
 
@@ -74,11 +88,7 @@ class MyHandler(httpserver.BaseHTTPRequestHandler):
             filesize = len(filevalue)
             #print(filesize)
             if filename:
-                if not os.path.exists('backup'):
-                    os.mkdir('backup')
-                file_path_name = os.path.join('backup',filename)
-                with open(file_path_name, 'wb') as f:
-                    f.write(filevalue)
+                save_file(filename, filevalue)
         return
 
 
